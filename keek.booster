@@ -1,0 +1,246 @@
+-- =============================================
+-- KeekHub - Clean & Working Speed Script
+-- =============================================
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local root = character:WaitForChild("HumanoidRootPart")
+
+-- ================== GUI ==================
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "KeekHub"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "Frame"
+mainFrame.Size = UDim2.new(0, 190, 0, 155)
+mainFrame.Position = UDim2.new(0.5, -95, 0.6, -78)
+mainFrame.BackgroundColor3 = Color3.fromRGB(18, 22, 32)
+mainFrame.BackgroundTransparency = 0.06
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Parent = screenGui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = mainFrame
+
+-- 🔴 RED OUTLINE HERE
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(255, 0, 0) -- red
+stroke.Thickness = 1.5
+stroke.Transparency = 0
+stroke.Parent = mainFrame
+
+-- Header
+local header = Instance.new("Frame")
+header.Size = UDim2.new(1, 0, 0, 26)
+header.BackgroundColor3 = Color3.fromRGB(20, 26, 38)
+header.BorderSizePixel = 0
+header.Parent = mainFrame
+
+local headerCorner = Instance.new("UICorner")
+headerCorner.CornerRadius = UDim.new(0, 12)
+headerCorner.Parent = header
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -10, 1, 0)
+title.Position = UDim2.new(0, 8, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Keek"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 14
+title.TextColor3 = Color3.new(1, 1, 1)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = header
+
+-- Speed Label
+local speedLabel = Instance.new("TextLabel")
+speedLabel.Position = UDim2.new(0, 10, 0, 28)
+speedLabel.Size = UDim2.new(1, -20, 0, 14)
+speedLabel.BackgroundTransparency = 1
+speedLabel.Font = Enum.Font.GothamMedium
+speedLabel.TextSize = 11
+speedLabel.TextColor3 = Color3.fromRGB(210, 220, 235)
+speedLabel.Text = "Speed: 23"
+speedLabel.Parent = mainFrame
+
+-- Progress Bar Background
+local barBg = Instance.new("Frame")
+barBg.Position = UDim2.new(0, 10, 0, 48)
+barBg.Size = UDim2.new(1, -20, 0, 3)
+barBg.BackgroundColor3 = Color3.fromRGB(60, 70, 90)
+barBg.BorderSizePixel = 0
+barBg.Parent = mainFrame
+
+local barCorner = Instance.new("UICorner")
+barCorner.CornerRadius = UDim.new(0, 3)
+barCorner.Parent = barBg
+
+-- Progress Bar
+local bar = Instance.new("Frame")
+bar.Size = UDim2.new(0.2167, 0, 1, 0)
+bar.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- 🔴 red bar to match
+bar.BorderSizePixel = 0
+bar.Parent = barBg
+
+local barCorner2 = Instance.new("UICorner")
+barCorner2.CornerRadius = UDim.new(0, 3)
+barCorner2.Parent = bar
+
+-- Speed Boost
+local boostLabel = Instance.new("TextLabel")
+boostLabel.Position = UDim2.new(0, 10, 0, 70)
+boostLabel.Size = UDim2.new(1, -50, 0, 14)
+boostLabel.BackgroundTransparency = 1
+boostLabel.Font = Enum.Font.GothamMedium
+boostLabel.TextSize = 11
+boostLabel.TextColor3 = Color3.fromRGB(220, 225, 240)
+boostLabel.Text = "Speed Boost"
+boostLabel.Parent = mainFrame
+
+local boostBtn = Instance.new("TextButton")
+boostBtn.Position = UDim2.new(1, -38, 0, 70)
+boostBtn.Size = UDim2.new(0, 28, 0, 14)
+boostBtn.BackgroundColor3 = Color3.fromRGB(80, 90, 110)
+boostBtn.BorderSizePixel = 0
+boostBtn.Text = ""
+boostBtn.AutoButtonColor = false
+boostBtn.Parent = mainFrame
+
+local boostKnob = Instance.new("Frame")
+boostKnob.Size = UDim2.new(0, 10, 0, 10)
+boostKnob.Position = UDim2.new(0, 2, 0.5, -5)
+boostKnob.BackgroundColor3 = Color3.new(1, 1, 1)
+boostKnob.Parent = boostBtn
+local knobCorner = Instance.new("UICorner", boostKnob)
+knobCorner.CornerRadius = UDim.new(1, 0)
+
+-- Steal Boost
+local stealLabel = Instance.new("TextLabel")
+stealLabel.Position = UDim2.new(0, 10, 0, 92)
+stealLabel.Size = UDim2.new(1, -50, 0, 14)
+stealLabel.BackgroundTransparency = 1
+stealLabel.Font = Enum.Font.GothamMedium
+stealLabel.TextSize = 11
+stealLabel.TextColor3 = Color3.fromRGB(220, 225, 240)
+stealLabel.Text = "Steal Boost"
+stealLabel.Parent = mainFrame
+
+local stealBtn = Instance.new("TextButton")
+stealBtn.Position = UDim2.new(1, -38, 0, 92)
+stealBtn.Size = UDim2.new(0, 28, 0, 14)
+stealBtn.BackgroundColor3 = Color3.fromRGB(80, 90, 110)
+stealBtn.BorderSizePixel = 0
+stealBtn.Text = ""
+stealBtn.AutoButtonColor = false
+stealBtn.Parent = mainFrame
+
+local stealKnob = Instance.new("Frame")
+stealKnob.Size = UDim2.new(0, 10, 0, 10)
+stealKnob.Position = UDim2.new(0, 2, 0.5, -5)
+stealKnob.BackgroundColor3 = Color3.new(1, 1, 1)
+stealKnob.Parent = stealBtn
+local stealKnobCorner = Instance.new("UICorner", stealKnob)
+stealKnobCorner.CornerRadius = UDim.new(1, 0)
+
+-- ================== SETTINGS ==================
+local currentSpeed = 23
+local speedBoostEnabled = false
+local stealBoostEnabled = false
+local dragging = false
+local dragInput, dragStart, startPos
+
+-- ================== DRAG ==================
+mainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+    end
+end)
+
+mainFrame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- ================== TOGGLES ==================
+local function updateKnob(btn, knob, enabled)
+    if enabled then
+        btn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        knob.Position = UDim2.new(1, -12, 0.5, -5)
+    else
+        btn.BackgroundColor3 = Color3.fromRGB(80, 90, 110)
+        knob.Position = UDim2.new(0, 2, 0.5, -5)
+    end
+end
+
+boostBtn.MouseButton1Click:Connect(function()
+    speedBoostEnabled = not speedBoostEnabled
+    updateKnob(boostBtn, boostKnob, speedBoostEnabled)
+end)
+
+stealBtn.MouseButton1Click:Connect(function()
+    stealBoostEnabled = not stealBoostEnabled
+    updateKnob(stealBtn, stealKnob, stealBoostEnabled)
+end)
+
+-- ================== SPEED UPDATE ==================
+local function updateSpeedUI()
+    speedLabel.Text = "Speed: " .. math.floor(currentSpeed)
+    local percent = (currentSpeed - 20) / 30
+    bar.Size = UDim2.new(math.clamp(percent, 0, 1), 0, 1, 0)
+end
+
+-- ================== MAIN LOOP ==================
+RunService.Heartbeat:Connect(function()
+    if not (character and character:FindFirstChild("HumanoidRootPart")) then return end
+    root = character.HumanoidRootPart
+
+    local moveDir = humanoid.MoveDirection
+    if moveDir.Magnitude > 0.1 then
+        local finalSpeed = currentSpeed
+
+        if speedBoostEnabled then
+            finalSpeed = finalSpeed * 1.8
+        end
+        if stealBoostEnabled then
+            finalSpeed = finalSpeed * 2.2
+        end
+
+        local newVel = moveDir * finalSpeed
+        root.AssemblyLinearVelocity = Vector3.new(newVel.X, root.AssemblyLinearVelocity.Y, newVel.Z)
+    end
+end)
+
+-- ================== SPEED CONTROL ==================
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.Equals then
+        currentSpeed = math.min(currentSpeed + 5, 50)
+        updateSpeedUI()
+    elseif input.KeyCode == Enum.KeyCode.Minus then
+        currentSpeed = math.max(currentSpeed - 5, 20)
+        updateSpeedUI()
+    end
+end)
+
+-- Initial UI
+updateSpeedUI()
+
+print("KeekHub loaded - Speed hack ready")
